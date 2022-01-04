@@ -10,8 +10,7 @@
         "content/content_script.js"
       ],
       "matches": [
-        "https://*/*",
-        "http://*/*"
+        "https://jira.teamsystem.com/*"
       ]
     }
   ],

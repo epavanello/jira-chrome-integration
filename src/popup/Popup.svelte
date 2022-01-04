@@ -1,7 +1,7 @@
 <script>
-  import Counter from "./Counter.svelte";
+  import Settings from './Settings.svelte'
 </script>
 
 <main class="p-2">
-  <Counter />
+  <Settings />
 </main>

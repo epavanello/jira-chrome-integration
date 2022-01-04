@@ -1,8 +1,8 @@
-import App from "./App.svelte";
-import "./tailwind.css";
+import DetailButtons from './DetailButtons.svelte'
 
-const app = new App({
-  target: document.body,
-});
-
-export default app;
+const detailContainer = document.getElementById('opsbar-edit-issue_container')
+if (detailContainer) {
+  new DetailButtons({
+    target: detailContainer
+  })
+}
