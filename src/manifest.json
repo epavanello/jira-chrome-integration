@@ -7,7 +7,7 @@
   "content_scripts": [
     {
       "js": [
-        "content/index.ts"
+        "content/content_script.js"
       ],
       "matches": [
         "https://*/*",
@@ -17,5 +17,8 @@
   ],
   "browser_action": {
     "default_popup": "popup/index.html"
-  }
+  },
+  "web_accessible_resources": [
+    "content/index.ts"
+  ]
 }

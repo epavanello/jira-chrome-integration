@@ -2,7 +2,7 @@
   "json.schemas": [
     {
       "fileMatch": ["manifest.json"],
-      "url": "./node_modules/rollup-plugin-chrome-extension/schema/manifest-v3.schema.json"
+      "url": "./node_modules/rollup-plugin-chrome-extension/schema/manifest-v2.schema.json"
     }
   ]
 }

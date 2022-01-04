@@ -1,3 +1,8 @@
-console.log("content script working");
+import App from "./App.svelte";
+import "./tailwind.css";
 
-export {}
+const app = new App({
+  target: document.body,
+});
+
+export default app;
