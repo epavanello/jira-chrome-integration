@@ -45,7 +45,7 @@
       <span class="trigger-label">Create branch</span>
     </a>
   {:else}
-    {#await getBrowserUrl then browserUrl}
+    {#await getBrowserUrl() then browserUrl}
       <a
         id="open-branch"
         title="Open branch"
@@ -61,23 +61,25 @@
 {/if}
 
 {#if mergeRequestID}
-  <a
-    id="create-merge-request"
-    title="Create merge request"
-    class="aui-button toolbar-trigger"
-    target="_blank"
-    href={`${browserUrl}-/merge_requests/${mergeRequestID}`}
-  >
-    <span class="aui-icon aui-icon-small aui-iconfont-create-pull-request" />
-    <span class="trigger-label"
-      >View merge request
-      {#if mergeRequestClosed || mergeRequestMerged}
-        (closed)
-      {:else}
-        (open)
-      {/if}
-    </span>
-  </a>
+  {#await getBrowserUrl() then browserUrl}
+    <a
+      id="create-merge-request"
+      title="Create merge request"
+      class="aui-button toolbar-trigger"
+      target="_blank"
+      href={`${browserUrl}-/merge_requests/${mergeRequestID}`}
+    >
+      <span class="aui-icon aui-icon-small aui-iconfont-create-pull-request" />
+      <span class="trigger-label"
+        >View merge request
+        {#if mergeRequestClosed || mergeRequestMerged}
+          (closed)
+        {:else}
+          (open)
+        {/if}
+      </span>
+    </a>
+  {/await}
 {:else if branchName}
   <a
     id="create-merge-request"

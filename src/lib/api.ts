@@ -4,8 +4,9 @@ export const getProjectName = async () => await getGitlabProjectName()
 // https://biosphere.teamsystem.com
 export const getRepoUrl = async () => await getGitlabUrl()
 
-// https://biosphere.teamsystem.com//api/v4/projects/hr%2Fpresenze/
-export const getApiUrl = async () => `${await getRepoUrl()}/api/v4/projects/${encodeURIComponent(await getProjectName())}/`
+// https://biosphere.teamsystem.com/api/v4/projects/hr%2Fpresenze/
+export const getApiUrl = async () =>
+  `${await getRepoUrl()}/api/v4/projects/${encodeURIComponent(await getProjectName())}/`
 // https://biosphere.teamsystem.com/hr/presenze/
 export const getBrowserUrl = async () => `${await getRepoUrl()}/${await getProjectName()}/`
 
@@ -72,21 +73,31 @@ export async function createMergeRequest(issueID: string, branchName: string) {
   })
 }
 
-export let getValue = (key: string): Promise<string> =>
-  new Promise((resolve) => {
-    chrome.storage.sync.get([key], function (items) {
-      resolve(items[key] || '')
-    })
-  })
+// export let getValue = (key: string): Promise<string> =>
+//   new Promise((resolve) => {
 
+//     chrome.storage.sync.get([key], function (items) {
+//       resolve(items[key] || '')
+//     })
+//   })
+
+// export let setValue = (key: string, value: string) =>
+//   new Promise<void>((resolve) => {
+//     chrome.storage.sync.set({ [key]: value }, resolve)
+//   })
+export let getValue = (key: string, def: string): Promise<string> =>
+  new Promise((resolve) => {
+    resolve(localStorage.getItem(key) || def)
+  })
 export let setValue = (key: string, value: string) =>
   new Promise<void>((resolve) => {
-    chrome.storage.sync.set({ [key]: value }, resolve)
+    localStorage.setItem(key, value)
+    resolve()
   })
 
-export let getGitlabUrl = () => getValue('gitlabUrl')
-export let getGitlabProjectName = () => getValue('gitlabProjectName')
-export let getGitlabAccessToken = () => getValue('gitlabAccessToken')
+export let getGitlabUrl = (def = 'https://biosphere.teamsystem.com') => getValue('gitlabUrl', def)
+export let getGitlabProjectName = (def = 'hr/presenze') => getValue('gitlabProjectName', def)
+export let getGitlabAccessToken = (def = 'eHXcs6sC8L1c1w8YhkoF') => getValue('gitlabAccessToken', def)
 
 export let setGilabUrl = (value: string) => setValue('gitlabUrl', value)
 export let setGilabProjectName = (value: string) => setValue('gitlabProjectName', value)
