@@ -1,3 +1,3 @@
-console.log("background script working");
+console.log('background script working')
 
 export {}

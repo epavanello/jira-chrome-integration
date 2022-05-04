@@ -2,7 +2,7 @@
   "private": true,
   "name": "jira-chrome-integration",
   "version": "0.0.1",
-  "description": "A browser extension template built with Svelte and TailwindCSS",
+  "description": "A browser extension for integrate Jira with Gitlab",
   "keywords": [
     "chrome-extension",
     "web-extension",
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/epavanello/jira-chrome-integration.git"
   },
-  "author": "Kyrell Dixon <kyrell@kyrelldixon.com>",
+  "author": "Pavanello Emanuele <pavanello.emanuele@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c",

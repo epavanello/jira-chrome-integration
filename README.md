@@ -75,19 +75,19 @@ src
     └── tailwind.css
 ```
 
-* `Popup.svelte` will become the extension's "browser action" popup
-* `popup/index.js` tells `Popup` where to load in `index.html`. It is also where Tailwind CSS gets loaded
-* `tailwind.css` is where you will add any custom tailwind styles
+- `Popup.svelte` will become the extension's "browser action" popup
+- `popup/index.js` tells `Popup` where to load in `index.html`. It is also where Tailwind CSS gets loaded
+- `tailwind.css` is where you will add any custom tailwind styles
 
 ## Why these choices?
 
 I wanted a boilerplate that would make it as easy as possible to get started building features and not setting up configurations. I also wanted the best possible extension development experience using modern tooling.
 
-* **TypeScript**: TypeScript saves you from ambiguous bugs and makes it the code super easy to navigate through. I made it optional so that you have the freedom to opt into TypeScript's extra functionality when you want to.
-* **Tailwind CSS**: This is my favorite CSS library because it helps me move fast. It's offers the perfect balance of speed and flexibility.
-* **Svelte**: Svelte helps keep the bundle size small through it's compilation step, and makes the code easy to navigate. It's a newer framework, but I think it is perfect for small focused applications like browser extensions
-* **Jest**: A clean framework that comes with everything you need for mocking, testing DOM interactions, and making sure your app is delivering the features you expect it to.
-* **Rollup**: Rollup takes advantage of ES Modules which keeps your bundle sizes small and optimized. It is also much easier to read and update than Webpack.
+- **TypeScript**: TypeScript saves you from ambiguous bugs and makes it the code super easy to navigate through. I made it optional so that you have the freedom to opt into TypeScript's extra functionality when you want to.
+- **Tailwind CSS**: This is my favorite CSS library because it helps me move fast. It's offers the perfect balance of speed and flexibility.
+- **Svelte**: Svelte helps keep the bundle size small through it's compilation step, and makes the code easy to navigate. It's a newer framework, but I think it is perfect for small focused applications like browser extensions
+- **Jest**: A clean framework that comes with everything you need for mocking, testing DOM interactions, and making sure your app is delivering the features you expect it to.
+- **Rollup**: Rollup takes advantage of ES Modules which keeps your bundle sizes small and optimized. It is also much easier to read and update than Webpack.
 
 ## Acknowledgments
 
@@ -95,6 +95,6 @@ Special thanks to Jack and Amy at [extend-chrome](https://github.com/extend-chro
 
 Other repos that helped me build the boilerplate:
 
-* [Svelte Template's `setupTypeScript.js`](https://github.com/sveltejs/template/blob/master/scripts/setupTypeScript.js) served as a reference for my own script.
-* [JS React Boilerplate](https://github.com/extend-chrome/js-react-boilerplate) gave me some ideas on how I could integrate `rollup-plugin-chrome-extension`
-* [Chrome Extension Template](https://github.com/duo-labs/chrome-extension-boilerplate) helped me write out this README
+- [Svelte Template's `setupTypeScript.js`](https://github.com/sveltejs/template/blob/master/scripts/setupTypeScript.js) served as a reference for my own script.
+- [JS React Boilerplate](https://github.com/extend-chrome/js-react-boilerplate) gave me some ideas on how I could integrate `rollup-plugin-chrome-extension`
+- [Chrome Extension Template](https://github.com/duo-labs/chrome-extension-boilerplate) helped me write out this README

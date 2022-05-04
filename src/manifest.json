@@ -1,23 +1,15 @@
 {
   "background": {
-    "scripts": [
-      "background/index.ts"
-    ]
+    "scripts": ["background/index.ts"]
   },
   "content_scripts": [
     {
-      "js": [
-        "content/content_script.js"
-      ],
-      "matches": [
-        "https://jira.teamsystem.com/*"
-      ]
+      "js": ["content/content_script.js"],
+      "matches": ["https://jira.teamsystem.com/*"]
     }
   ],
   "browser_action": {
     "default_popup": "popup/index.html"
   },
-  "web_accessible_resources": [
-    "content/index.ts"
-  ]
+  "web_accessible_resources": ["content/index.ts"]
 }
