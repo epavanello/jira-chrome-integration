@@ -38,8 +38,6 @@
   }
 </script>
 
-<main>
-  <Input bind:value={gitlabUrl} label="Gitlab url" placeholder="https://www.gitlab.com" />
-  <Input bind:value={gitlabProject} label="Gitlab project" placeholder="COMPANY/REPO" />
-  <Input bind:value={gitlabAccessToken} label="Gitlab access token" placeholder="xxxxxxx" />
-</main>
+<Input bind:value={gitlabUrl} label="Gitlab url" placeholder="https://www.gitlab.com" />
+<Input bind:value={gitlabProject} label="Gitlab project" placeholder="COMPANY/REPO" />
+<Input bind:value={gitlabAccessToken} label="Gitlab access token" placeholder="xxxxxxx" type="password" />

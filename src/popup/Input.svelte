@@ -1,21 +1,29 @@
 <script lang="ts">
   export let label: string
   export let value: string
-  export let placeholder: string = ''
+  export let type = 'text'
+  export let placeholder = ''
   export let help: string | undefined = undefined
+
+  const handleInput = ({ target }: { target: EventTarget | null }) => {
+    value = (target as HTMLInputElement)?.value
+  }
 </script>
 
 <div>
-  <label for="email" class="block text-sm font-medium text-gray-700">{label}</label>
-  <div class="mt-1">
+  <label class="block text-sm font-medium text-gray-600">
+    <span class="mb-2 inline-block">
+      {label}
+    </span>
     <input
-      type="text"
-      bind:value
-      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+      {type}
+      {value}
+      on:input={handleInput}
+      class="bg-purple-white shadow rounded border-0 p-3 w-full"
       {placeholder}
-      aria-describedby="email-description"
+      aria-describedby={label}
     />
-  </div>
+  </label>
   {#if help}
     <p class="mt-2 text-sm text-gray-500">{help}</p>
   {/if}

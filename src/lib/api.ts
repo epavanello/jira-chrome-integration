@@ -1,8 +1,8 @@
 // hr/presenze
-export const getProjectName = async () => await getGitlabProjectName()
+export const getProjectName = async () => await getGitlabProjectNameFromContentScript()
 
 // https://biosphere.teamsystem.com
-export const getRepoUrl = async () => await getGitlabUrl()
+export const getRepoUrl = async () => await getGitlabUrlFromContentScript()
 
 // https://biosphere.teamsystem.com/api/v4/projects/hr%2Fpresenze/
 export const getApiUrl = async () =>
@@ -10,7 +10,11 @@ export const getApiUrl = async () =>
 // https://biosphere.teamsystem.com/hr/presenze/
 export const getBrowserUrl = async () => `${await getRepoUrl()}/${await getProjectName()}/`
 
-export async function Fetch<T extends {}>(path: string, method?: string, body?: Record<string, any>): Promise<T> {
+export async function Fetch<T>(
+  path: string,
+  method?: string,
+  body?: Record<string, string | number | boolean>
+): Promise<T> {
   const resource = (await getApiUrl()) + path
   const separator = resource.indexOf('?') > 0 ? '&' : '?'
   const response = await fetch(
@@ -24,7 +28,7 @@ export async function Fetch<T extends {}>(path: string, method?: string, body?: 
     {
       method,
       headers: {
-        'PRIVATE-TOKEN': await getGitlabAccessToken()
+        'PRIVATE-TOKEN': await getGitlabAccessTokenFromContentScript()
       }
     }
   )
@@ -40,11 +44,14 @@ export async function searchBranchByIssueID(issueID: string): Promise<{ name: st
   return searchBranch[0]
 }
 
-export async function createBranch(branchName: string, issueDescription: string): Promise<{ name: string }> {
+export async function createBranch(branchName: string, issueDescription: string): Promise<{ name: string } | null> {
   const branchDescription = window.prompt(
     'Enter branch description',
     issueDescription.toLowerCase().replaceAll(' ', '-')
   )
+  if (branchDescription == null) {
+    return null
+  }
   const newBranch = await Fetch<{ name: string }>(
     `repository/branches?branch=${encodeURIComponent(`feature/${branchName}-${branchDescription}`)}&ref=develop`,
     'POST'
@@ -85,20 +92,43 @@ export async function createMergeRequest(issueID: string, branchName: string) {
 //   new Promise<void>((resolve) => {
 //     chrome.storage.sync.set({ [key]: value }, resolve)
 //   })
-export let getValue = (key: string, def: string): Promise<string> =>
+export const getValue = (key: string, def: string): Promise<string> =>
   new Promise((resolve) => {
-    resolve(localStorage.getItem(key) || def)
+    chrome.storage.sync.get([key], function (items) {
+      resolve(items[key] || def)
+    })
   })
-export let setValue = (key: string, value: string) =>
+export const setValue = (key: string, value: string) =>
   new Promise<void>((resolve) => {
-    localStorage.setItem(key, value)
-    resolve()
+    chrome.storage.sync.set({ [key]: value }, resolve)
   })
 
-export let getGitlabUrl = (def = 'https://biosphere.teamsystem.com') => getValue('gitlabUrl', def)
-export let getGitlabProjectName = (def = 'hr/presenze') => getValue('gitlabProjectName', def)
-export let getGitlabAccessToken = (def = 'eHXcs6sC8L1c1w8YhkoF') => getValue('gitlabAccessToken', def)
+export const getValueFromContentScript = (key: string, def: string): Promise<string> =>
+  new Promise((resolve) => {
+    window.postMessage({ type: 'getStorageData', key }, '*')
 
-export let setGilabUrl = (value: string) => setValue('gitlabUrl', value)
-export let setGilabProjectName = (value: string) => setValue('gitlabProjectName', value)
-export let setGilabAccessToken = (value: string) => setValue('gitlabAccessToken', value)
+    const listener = (event: MessageEvent<{ value: string; key: string; type: string }>) => {
+      if (event.data.type === 'getStorageDataResponse' && event.data.key === key) {
+        resolve(event.data.value || def)
+        console.log('ask for value', key, event.data.value)
+        window.removeEventListener('message', listener)
+      }
+    }
+
+    window.addEventListener('message', listener)
+  })
+export const setValueFromContentScript = (key: string, value: string) => {
+  window.postMessage({ type: 'setStorageData', key, value }, '*')
+}
+
+export const getGitlabUrl = (def = '') => getValue('gitlabUrl', def)
+export const getGitlabProjectName = (def = '') => getValue('gitlabProjectName', def)
+export const getGitlabAccessToken = (def = '') => getValue('gitlabAccessToken', def)
+
+export const getGitlabUrlFromContentScript = (def = '') => getValueFromContentScript('gitlabUrl', def)
+export const getGitlabProjectNameFromContentScript = (def = '') => getValueFromContentScript('gitlabProjectName', def)
+export const getGitlabAccessTokenFromContentScript = (def = '') => getValueFromContentScript('gitlabAccessToken', def)
+
+export const setGilabUrl = (value: string) => setValue('gitlabUrl', value)
+export const setGilabProjectName = (value: string) => setValue('gitlabProjectName', value)
+export const setGilabAccessToken = (value: string) => setValue('gitlabAccessToken', value)

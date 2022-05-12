@@ -4,6 +4,7 @@
   "exclude": ["node_modules/*", "dist/*"],
   "compilerOptions": {
     "lib": ["esnext", "dom"],
-    "types": ["chrome", "svelte"]
+    "types": ["chrome", "svelte"],
+    "strict": true
   }
 }

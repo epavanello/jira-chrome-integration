@@ -1,15 +1,10 @@
 <script lang="ts">
-  import {
-    getBrowserUrl,
-    createBranch,
-    createMergeRequest,
-    searchBranchByIssueID,
-    searchMergeRequestByIssueID
-  } from '../lib/api'
+  import { getBrowserUrl, createBranch, searchBranchByIssueID, searchMergeRequestByIssueID } from '../lib/api'
+  import Link from './Link.svelte'
 
-  const issueID = document.querySelector<HTMLMetaElement>('meta[name="ajs-issue-key"]').content
-
-  let issueDescription = document.getElementById('summary-val')!.textContent
+  export let view: 'detail' | 'full'
+  export let issueID: string
+  let issueDescription = document.getElementById('summary-val')?.textContent || ''
 
   let branchName = ''
   let branchMeged = false
@@ -17,33 +12,39 @@
   let mergeRequestMerged = false
   let mergeRequestClosed = false
 
-  searchBranchByIssueID(issueID).then((branch) => {
+  let loaded = false
+
+  console.log('Gitlab', 'search by', issueID)
+
+  Promise.all([searchBranchByIssueID(issueID), searchMergeRequestByIssueID(issueID)]).then(([branch, mergeRequest]) => {
     if (branch) {
       branchName = branch.name
       branchMeged = branch.merged
     }
-  })
-
-  searchMergeRequestByIssueID(issueID).then((mergeRequest) => {
     if (mergeRequest) {
       mergeRequestID = mergeRequest.iid
       mergeRequestMerged = mergeRequest.state === 'merged'
       mergeRequestClosed = mergeRequest.state === 'closed'
     }
+    loaded = true
   })
 </script>
 
+{#if !loaded}
+  <aui-spinner size="small" style="margin: 10px;" />
+{/if}
+
 {#if !mergeRequestMerged}
   {#if branchName == ''}
-    <a
-      id="create-branch"
+    <Link
       title="Create branch"
-      class="aui-button toolbar-trigger"
-      on:click={() => createBranch(issueID, issueDescription).then((branch) => (branchName = branch.name))}
-    >
-      <span class="icon aui-icon aui-icon-small aui-iconfont-create-branch" />
-      <span class="trigger-label">Create branch</span>
-    </a>
+      on:click={() =>
+        createBranch(issueID, issueDescription).then((branch) => {
+          if (branch) branchName = branch.name
+        })}
+      icon="aui-iconfont-create-branch"
+      >Create branch
+    </Link>
   {:else}
     {#await getBrowserUrl() then browserUrl}
       <a
@@ -62,32 +63,20 @@
 
 {#if mergeRequestID}
   {#await getBrowserUrl() then browserUrl}
-    <a
-      id="create-merge-request"
+    <Link
       title="Create merge request"
-      class="aui-button toolbar-trigger"
       target="_blank"
       href={`${browserUrl}-/merge_requests/${mergeRequestID}`}
+      icon="aui-iconfont-create-pull-request"
     >
-      <span class="aui-icon aui-icon-small aui-iconfont-create-pull-request" />
-      <span class="trigger-label"
-        >View merge request
-        {#if mergeRequestClosed || mergeRequestMerged}
-          (closed)
-        {:else}
-          (open)
-        {/if}
-      </span>
-    </a>
+      View merge request
+      {#if mergeRequestClosed || mergeRequestMerged}
+        (closed)
+      {:else}
+        (open)
+      {/if}
+    </Link>
   {/await}
 {:else if branchName}
-  <a
-    id="create-merge-request"
-    title="Create merge request"
-    class="aui-button toolbar-trigger"
-    on:click={() => createMergeRequest(issueID, branchName).then((mergeRequest) => (mergeRequestID = mergeRequest.iid))}
-  >
-    <span class="aui-icon aui-icon-small aui-iconfont-create-pull-request" />
-    <span class="trigger-label">Create merge request</span>
-  </a>
+  <Link title="Create merge request" icon="aui-iconfont-create-pull-request">Create merge request</Link>
 {/if}
