@@ -5,7 +5,7 @@
   "content_scripts": [
     {
       "js": ["content/content_script.js"],
-      "matches": ["https://jira.teamsystem.com/*"]
+      "matches": ["*://*/*"]
     }
   ],
   "browser_action": {

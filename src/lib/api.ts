@@ -1,13 +1,11 @@
 // hr/presenze
 export const getProjectName = async () => await getGitlabProjectNameFromContentScript()
 
-// https://biosphere.teamsystem.com
 export const getRepoUrl = async () => await getGitlabUrlFromContentScript()
 
-// https://biosphere.teamsystem.com/api/v4/projects/hr%2Fpresenze/
 export const getApiUrl = async () =>
   `${await getRepoUrl()}/api/v4/projects/${encodeURIComponent(await getProjectName())}/`
-// https://biosphere.teamsystem.com/hr/presenze/
+
 export const getBrowserUrl = async () => `${await getRepoUrl()}/${await getProjectName()}/`
 
 export async function Fetch<T>(
